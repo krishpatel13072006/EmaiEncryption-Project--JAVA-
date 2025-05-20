@@ -1,8 +1,15 @@
 package views;
 
+import Model.User;
+import Service.SendOTPService;
+import Service.UserService;
+import Service.generateOTP;
+import dao.UserDAO;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.sql.SQLException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -57,8 +64,64 @@ public class Welcome {
     }
 
     private void Signup() {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter Name: ");
+        String name = sc.nextLine();
+        System.out.println("Enter Email: ");
+        String email = sc.nextLine();
+
+        // Generate OTP here
+        String genotp = generateOTP.getotp(); // ✅ Call OTP generator
+        SendOTPService.sendOTP(email, genotp); // ✅ Send the generated OTP to the email
+
+        System.out.println("Enter OTP: ");
+        String otp = sc.nextLine();
+
+        if (otp.equals(genotp)) {
+            User user = new User(name, email);
+            int response = UserService.saveuser(user);
+
+            switch (response) {
+                case 0 -> System.out.println("User Registered !");
+                case 1 -> System.out.println("User already Exist!");
+            }
+        } else {
+            System.out.println("Wrong OTP!!");
+        }
     }
 
     private void Login() {
+        Scanner sc=new Scanner(System.in);
+            String email=sc.nextLine();
+            try{
+                if(UserDAO.isexist(email))
+                {
+                    String genOTP= generateOTP.getotp();
+                    SendOTPService.sendOTP(email,genOTP);
+                    System.out.println("Enter the OTP : ");
+                    String  otp=sc.nextLine();
+                    if(otp.equals(genOTP))
+                    {
+                        System.out.println("Welcome \uD83D\uDE00");
+                    }else{
+                        System.out.println("Wrong OTP!! \uD83D\uDE14");
+                    }
+                }else{
+                    System.out.println("Uer not Found \uD83D\uDE14 !!");
+                }
+            }catch(SQLException e)
+            {
+                e.printStackTrace();
+            }
+        }
+
+    public static void main(String[] args) {
+        Welcome x=new Welcome();
+        do{
+            x.enterScreen();
+        }while(true);
+
     }
-}
+    }
+
+

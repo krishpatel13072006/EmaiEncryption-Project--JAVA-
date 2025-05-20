@@ -12,12 +12,12 @@ public class Myconnections {
 
         try{
             Class.forName("com.mysql.cj.jdbc.Driver");
-            connection= DriverManager.getConnection("jdbc:mysql://localhost:3306/mydatabase?useSSL=false","root","krishpatel13579");
+            connection= DriverManager.getConnection("jdbc:mysql://localhost:3306/mydatabase?allowPublicKeyRetrieval=true&useSSL=false","root","krishpatel13579");
         }catch(ClassNotFoundException | SQLException e)
         {
             e.printStackTrace();
         }
-        System.out.println("connection ho gaya bhai....");
+//        System.out.println("connection ho gaya bhai....");
         return connection;
     }
 
@@ -33,5 +33,10 @@ public class Myconnections {
                 e.printStackTrace();
             }
         }
+    }
+
+    public static void main(String[] args) {
+        Myconnections con=new Myconnections();
+        con.getConnection();
     }
 }
