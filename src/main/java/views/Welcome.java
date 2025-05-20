@@ -1,5 +1,6 @@
 package views;
 
+import Model.Data;
 import Model.User;
 import Service.SendOTPService;
 import Service.UserService;
@@ -103,6 +104,7 @@ public class Welcome {
                     if(otp.equals(genOTP))
                     {
                         System.out.println("Welcome \uD83D\uDE00");
+                        new User_view(email).home();
                     }else{
                         System.out.println("Wrong OTP!! \uD83D\uDE14");
                     }
@@ -115,13 +117,6 @@ public class Welcome {
             }
         }
 
-    public static void main(String[] args) {
-        Welcome x=new Welcome();
-        do{
-            x.enterScreen();
-        }while(true);
-
-    }
     }
 
 
